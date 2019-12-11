@@ -80,22 +80,16 @@ public class ProfilController {
     @RequestMapping (value = "/updateprofile")
     public String changeUserDataAction(User user, BindingResult result, Model model, Locale locale){
         String returnPage = null;
-        System.out.println("1");
-        System.out.println(user.getEmail());
         String emailUser = user.getEmail();
 
         User userExist = userService.findUserByEmail(emailUser);
-
-        System.out.println("XD");
 
         new EditProfileValidator().validateEmailExists(userExist, result);
         new EditProfileValidator().validate(user, result);
 
         if(result.hasErrors()){
-            System.out.println("wszedlem tu");
             returnPage = "editprofile";
         } else {
-            System.out.println("siema");
             userService.updateUserProfile(user.getName(), user.getLastName(), user.getEmail(), user.getId());
             model.addAttribute("message", messageSource.getMessage("profilEdit.success", null, locale));
             returnPage = "afteredit";
